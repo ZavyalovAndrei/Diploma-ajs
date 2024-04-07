@@ -1,6 +1,13 @@
-import { Daemon } from "../characters/Daemon";
+import Daemon from "../characters/Daemon";
 
-test('should return character to string', () => {
-    const result = new Daemon(1);
-    expect(result.toString()).toEqual('daemon (уровень: 1, здоровье: 100, атака: 10, защита: 10)');
-  });
+test("should be created a new Daemon with correct parameters", () => {
+  const expected = {
+    level: 1,
+      type: 'daemon',
+      health: 50,
+      attack: 10,
+      defence: 10,
+  };
+  const result = new Daemon(1);
+  expect(result).toEqual(expected);
+});

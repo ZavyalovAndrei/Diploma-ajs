@@ -1,6 +1,13 @@
-import { Swordsman } from "../characters/Swordsman";
+import Swordsman from "../characters/Swordsman";
 
-test('should return character to string', () => {
-    const result = new Swordsman(1);
-    expect(result.toString()).toEqual('swordsman (уровень: 1, здоровье: 100, атака: 40, защита: 10)');
-  });
+test("should be created a new Swordsman with correct parameters", () => {
+  const expected = {
+    level: 1,
+    type: "swordsman",
+    health: 50,
+    attack: 40,
+    defence: 10,
+  };
+  const result = new Swordsman(1);
+  expect(result).toEqual(expected);
+});

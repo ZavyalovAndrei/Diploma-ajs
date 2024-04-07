@@ -1,6 +1,13 @@
-import { Magician } from "../characters/Magician";
+import Magician from "../characters/Magician";
 
-test('should return character to string', () => {
-    const result = new Magician(1);
-    expect(result.toString()).toEqual('magician (уровень: 1, здоровье: 100, атака: 10, защита: 40)');
-  });
+test("should be created a new Magician with correct parameters", () => {
+  const expected = {
+    level: 1,
+      type: 'magician',
+      health: 50,
+      attack: 10,
+      defence: 40,
+  };
+  const result = new Magician(1);
+  expect(result).toEqual(expected);
+});

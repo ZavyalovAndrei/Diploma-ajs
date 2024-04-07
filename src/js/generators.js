@@ -1,5 +1,3 @@
-import Team from "./Team";
-
 /**
  * Формирует экземпляр персонажа из массива allowedTypes со
  * случайным уровнем от 1 до maxLevel
@@ -10,10 +8,18 @@ import Team from "./Team";
  * возвращает новый экземпляр класса персонажа
  *
  */
-export function* characterGenerator(allowedTypes, maxLevel) {
-  yield new allowedTypes[Math.floor(Math.random() * (allowedTypes.length - 1))](
-    Math.ceil(Math.random() * maxLevel)
-  );
+export function* characterGenerator(allowedTypes, maxLevel, arg) {
+  if (arg === "new") {
+    for (let i = 0; i < +Infinity; i += 1) {
+      yield new allowedTypes[Math.floor(Math.random() * allowedTypes.length)](
+        Math.ceil(Math.random() * maxLevel)
+      );
+    }
+  } else {
+    for (let i = 0; i < allowedTypes.length; i += 1) {
+      yield new allowedTypes[i](maxLevel);
+    }
+  }
 }
 
 /**
@@ -21,48 +27,21 @@ export function* characterGenerator(allowedTypes, maxLevel) {
  * @param allowedTypes массив классов
  * @param maxLevel максимальный возможный уровень персонажа
  * @param characterCount количество персонажей, которое нужно сформировать
- * @returns экземпляр Team, хранящий экземпляры персонажей. Количество персонажей в команде - characterCount
+ * @returns экземпляр Team, хранящий экземпляры персонажей. Количество персонажей в команде
+ * - characterCount
  * */
-export function generateTeam(allowedTypes, maxLevel, characterCount) {
-  const generatedTeam = [];
-  for (let i = 0; i < characterCount; i++) {
-    const teamGenerator = characterGenerator(allowedTypes, maxLevel);
-    generatedTeam.push(teamGenerator.next().value);
-  }
-  return new Team(generatedTeam);
-}
-
-export function generatePosition(characterCount, boardSize) {
-  const positions = { player: [], enemy: [] };
-  const randomPositions = { player: [], enemy: [] };
-
-  for (let index = 0; index < boardSize; index++) {
-    const row = boardSize * index;
-    positions.player.push(row);
-    positions.player.push(row + 1);
-    positions.enemy.push(row + boardSize - 2);
-    positions.enemy.push(row + boardSize - 1);
-  }
-
-  for (let i = 0; i < characterCount; ) {
-    const playerPositionIndex = Math.floor(
-      Math.random() * positions.player.length
-    );
-    const playerPosition = positions.player[playerPositionIndex];
-    const enemyPositionIndex = Math.floor(
-      Math.random() * positions.enemy.length
-    );
-    const enemyPosition = positions.enemy[enemyPositionIndex];
-    if (
-      randomPositions.player.indexOf(playerPosition) === -1 &&
-      randomPositions.enemy.indexOf(enemyPosition) === -1
-    ) {
-      randomPositions.player.push(playerPosition);
-      randomPositions.enemy.push(enemyPosition);
-      i++;
-    } else {
-      continue;
+export function generateTeam(arg, allowedTypes, maxLevel, characterCount) {
+  const team = [];
+  if (arg === "new") {
+    const characters = characterGenerator(allowedTypes, maxLevel, "new");
+    for (let i = 0; i < characterCount; i += 1) {
+      team.push(characters.next().value);
+    }
+  } else {
+    const characters = characterGenerator(allowedTypes, maxLevel, "load");
+    for (let i = 0; i < characterCount; i += 1) {
+      team.push(characters.next().value);
     }
   }
-  return randomPositions;
+  return team;
 }

@@ -14,28 +14,15 @@
  */
 
 export default class Character {
-  constructor(level, type = "generic") {
+  constructor(level, type = 'generic') {
     this.level = level;
     this.attack = 0;
     this.defence = 0;
-    this.health = 50;
+    this.health = 100;
     this.type = type;
-    if (new.target.name === "Character") {
-      throw new Error("Ошибка! Невозможно создать нового персонажа.");
+
+    if (new.target.name === 'Character') {
+      throw new Error('Ошибка! Невозможно создать нового персонажа.');
     }
-  }
-  toString() {
-    return (
-      this.type +
-      " (уровень: " +
-      this.level +
-      ", здоровье: " +
-      this.health +
-      ", атака: " +
-      this.attack +
-      ", защита: " +
-      this.defence +
-      ")"
-    );
   }
 }

@@ -1,6 +1,14 @@
-import { Undead } from "../characters/Undead";
+import Undead from "../characters/Undead";
 
-test('should return character to string', () => {
-    const result = new Undead(1);
-    expect(result.toString()).toEqual('undead (уровень: 1, здоровье: 100, атака: 40, защита: 10)');
-  });
+
+test("should be created a new Undead with correct parameters", () => {
+  const expected = {
+    level: 1,
+    type: 'undead',
+    health: 50,
+    attack: 40,
+    defence: 10,
+  };
+  const result = new Undead(1);
+  expect(result).toEqual(expected);
+});
