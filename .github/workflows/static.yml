@@ -26,7 +26,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: https://github.com/ZavyalovAndrei/Diploma-ajs/tree/main/src
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
