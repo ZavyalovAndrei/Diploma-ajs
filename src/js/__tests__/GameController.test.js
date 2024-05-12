@@ -14,7 +14,7 @@ gameCtrl.activeCharacter = {
     level: 2,
     attack: 40,
     defence: 10,
-    health: 50,
+    health: 100,
     type: "swordsman",
   },
   position: 8,
@@ -22,7 +22,7 @@ gameCtrl.activeCharacter = {
 
 test("for method generateMessage of ClassGameController", () => {
   const bowman = new Bowman(1);
-  expect(GameController.generateMessage(bowman)).toBe("🎖1 ⚔25 🛡25 ❤50");
+  expect(GameController.generateMessage(bowman)).toBe("🎖1 ⚔25 🛡25 ❤100");
 });
 
 jest.mock("../GameStateService");
@@ -42,7 +42,7 @@ test("for method onSaveGameClick", () => {
             character: {
               attack: 10,
               defence: 10,
-              health: 50,
+              health: 100,
               level: 1,
               type: "daemon",
             },
@@ -52,7 +52,7 @@ test("for method onSaveGameClick", () => {
             character: {
               attack: 40,
               defence: 10,
-              health: 50,
+              health: 100,
               level: 1,
               type: "undead",
             },
@@ -68,7 +68,7 @@ test("for method onSaveGameClick", () => {
             character: {
               attack: 40,
               defence: 10,
-              health: 50,
+              health: 100,
               level: 1,
               type: "swordsman",
             },
@@ -78,7 +78,7 @@ test("for method onSaveGameClick", () => {
             character: {
               attack: 25,
               defence: 25,
-              health: 50,
+              health: 100,
               level: 1,
               type: "bowman",
             },
@@ -99,7 +99,7 @@ test("for method onSaveGameClick", () => {
           character: {
             attack: 10,
             defence: 10,
-            health: 50,
+            health: 100,
             level: 1,
             type: "daemon",
           },
@@ -109,7 +109,7 @@ test("for method onSaveGameClick", () => {
           character: {
             attack: 40,
             defence: 10,
-            health: 50,
+            health: 100,
             level: 1,
             type: "undead",
           },
@@ -125,7 +125,7 @@ test("for method onSaveGameClick", () => {
           character: {
             attack: 40,
             defence: 10,
-            health: 50,
+            health: 100,
             level: 1,
             type: "swordsman",
           },
@@ -135,7 +135,7 @@ test("for method onSaveGameClick", () => {
           character: {
             attack: 25,
             defence: 25,
-            health: 50,
+            health: 100,
             level: 1,
             type: "bowman",
           },
@@ -152,7 +152,7 @@ beforeEach(() => {
   jest.resetAllMocks();
 });
 
-test("for method onSaveGameClick", () => {
+test('for method onSaveGameClick and expect "Invalid state"', () => {
   gameCtrl.stateService.load.mockImplementation(() => {
     throw new Error("Invalid state")
   });

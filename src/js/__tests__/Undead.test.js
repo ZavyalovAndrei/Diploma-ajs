@@ -5,7 +5,7 @@ test("should be created a new Undead with correct parameters", () => {
   const expected = {
     level: 1,
     type: 'undead',
-    health: 50,
+    health: 100,
     attack: 40,
     defence: 10,
   };

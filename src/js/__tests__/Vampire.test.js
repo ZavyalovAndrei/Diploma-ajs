@@ -4,7 +4,7 @@ test("should be created a new Vampire with correct parameters", () => {
   const expected = {
     level: 1,
     type: "vampire",
-    health: 50,
+    health: 100,
     attack: 25,
     defence: 25,
   };

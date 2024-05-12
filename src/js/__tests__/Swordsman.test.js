@@ -4,7 +4,7 @@ test("should be created a new Swordsman with correct parameters", () => {
   const expected = {
     level: 1,
     type: "swordsman",
-    health: 50,
+    health: 100,
     attack: 40,
     defence: 10,
   };

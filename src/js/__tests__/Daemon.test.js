@@ -4,7 +4,7 @@ test("should be created a new Daemon with correct parameters", () => {
   const expected = {
     level: 1,
       type: 'daemon',
-      health: 50,
+      health: 100,
       attack: 10,
       defence: 10,
   };
