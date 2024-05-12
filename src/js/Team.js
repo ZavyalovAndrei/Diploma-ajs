@@ -27,10 +27,7 @@ export default class Team {
   }
 
   getActiveCharacter() {
-    if (this.activeCharacter) {
-      return this.activeCharacter;
-    }
-    return null;
+        return this.activeCharacter;
   }
 
   deleteActiveCharacter() {
@@ -58,36 +55,9 @@ export default class Team {
     });
   }
 
-  levelUp() {
-    for (const el of this.characters) {
-      el.character.level += 1;
-      el.character.attack = Math.ceil(
-        Math.max(
-          el.character.attack,
-          (el.character.attack * (80 + el.character.health)) / 100,
-        ),
-      );
-      el.character.defence = Math.ceil(
-        Math.max(
-          el.character.defence,
-          (el.character.defence * (80 + el.character.health)) / 100,
-        ),
-      );
-      if (el.character.health + 80 > 100) {
-        el.character.health = 100;
-      } else el.character.health += 80;
-    }
-
-    const arr = [];
-    this.characters.forEach((item) => arr.push(item.character));
-
-    return arr;
-  }
-
+  
   getTeam() {
-    const team = [];
-    this.characters.forEach((el) => team.push(el.character));
-    return team;
+    return [...this.characters]
   }
 
   getCharacter(index) {
@@ -110,11 +80,7 @@ export default class Team {
   }
 
   remove(index) {
-    this.characters.forEach((el, i) => {
-      if (el.position === index) {
-        this.characters.splice(i, 1);
-      }
-    });
+    this.characters = this.characters.filter((character) => character.position !== index);
     if (
       this.activeCharacter !== null
       && this.activeCharacter.position === index

@@ -25,4 +25,23 @@ export default class Character {
       throw new Error('Ошибка! Невозможно создать нового персонажа.');
     }
   }
+
+  levelUp() {
+    this.level ++;
+    this.attack = Math.ceil(
+      Math.max(
+        this.attack,
+        (this.attack * (80 + this.health)) / 100,
+      ),
+    );
+    this.defence = Math.ceil(
+      Math.max(
+        this.defence,
+        (this.defence * (80 + this.health)) / 100,
+      ),
+    );
+    if (this.health + 80 > 100) {
+      this.health = 100;
+    } else this.health += 80;
+  }
 }

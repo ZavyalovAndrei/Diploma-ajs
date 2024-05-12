@@ -33,18 +33,8 @@ export default class GameController {
   }
 
   setAblePositions(boardSize) {
-    this.playerAblePositions = [];
-    this.botAblePositions = [];
-
-    for (let i = 0; i < boardSize * boardSize; i += boardSize) {
-      this.playerAblePositions.push(i);
-      this.playerAblePositions.push(i + 1);
-    }
-
-    for (let i = 6; i < boardSize * boardSize; i += boardSize) {
-      this.botAblePositions.push(i);
-      this.botAblePositions.push(i + 1);
-    }
+    this.playerAblePositions = (Array.from({length: boardSize}).map((_, index) => (index * boardSize))).concat(Array.from({length: boardSize}).map((_, index) => (index * boardSize) + 1));
+    this.botAblePositions = (Array.from({length: boardSize}).map((_, index) => (index * boardSize) + (boardSize - 1))).concat(Array.from({length: boardSize}).map((_, index) => (index * boardSize) + (boardSize - 2)));
   }
 
   createTeams(level, charactersCount, playerCharacters = []) {
@@ -161,6 +151,7 @@ export default class GameController {
 
         this.gamePlay.drawUi(theme);
         this.renderField(this.gameState.getPositions());
+        GamePlay.showMessage("Игра успешно загружена.");
       } catch (e) {
         GamePlay.showError(e);
       }
@@ -190,6 +181,7 @@ export default class GameController {
         savedState.botTeam.savedTypes.push(i);
       });
       this.stateService.save(savedState);
+      GamePlay.showMessage("Игра успешно сохранена");
     }
   }
 
@@ -233,7 +225,6 @@ export default class GameController {
       if (target === null) {
         throw new Error("В цели атаки отсутствует персонаж");
       }
-
       const damage = Math.ceil(
         Math.max(
           attacker.attack - target.character.defence,
@@ -246,10 +237,7 @@ export default class GameController {
       } else {
         target.character.health -= damage;
       }
-
-      this.gamePlay
-        .showDamage(index, damage)
-        .then(() => {
+        setTimeout(() => {this.gamePlay.showDamage(index, damage)}, 1);
           this.gameState.addScore(this.gameState.activeTeam, damage);
           this.gamePlay.deselectCell(index);
           if (target.character.health === 0) {
@@ -270,22 +258,11 @@ export default class GameController {
               return;
             }
           }
-          this.renderField(this.gameState.getPositions());
-        })
-        .catch((e) => {
-          console.log(e);
-        })
-        .finally(() => {
-          this.passMove();
-        });
+            this.renderField(this.gameState.getPositions()); 
+            this.passMove();
     } else if (arg === "go") {
-      if (this.gameState.activeTeam === "playerTeam") {
-        this.gameState.update(index);
-      } else {
-        this.gameState.update(index);
-      }
+      this.gameState.update(index);
       this.renderField(this.gameState.getPositions());
-
       this.passMove();
     }
   }
@@ -311,23 +288,24 @@ export default class GameController {
         const { level, maxCharacters } = this.gameState.getSettings();
         this.createTeams(level, maxCharacters, []);
       } else {
-        const newCharacters = this.gameState.upLevel();
+        const newTeam = this.gameState.upLevel();
         const { level, theme, maxCharacters } = this.gameState.getSettings();
         this.gamePlay.drawUi(theme);
-        this.createTeams(level, maxCharacters, newCharacters);
+        this.createTeams(level, maxCharacters, newTeam);
       }
-  
-      this.renderField(this.gameState.getPositions());    
+        this.renderField(this.gameState.getPositions());    
   }
 
   passMove() {
     if (this.gameState.state === "inProcess") {
-      this.gameState.changeTeam();
+        this.gameState.changeTeam();
+
       if (this.gameState.activeTeam === "playerTeam") {
         const activeCharacter = this.gameState.playerTeam.getActiveCharacter();
         if (activeCharacter) {
           this.gameState.setActiveCharacter(activeCharacter.position);
           this.gamePlay.selectCell(this.gameState.activeCharacter.position);
+
         }
       }
 
@@ -376,6 +354,7 @@ export default class GameController {
       this.action(goAbleFields[goIndex], "go");
     }
   }
+  
   onCellClick(index) {
     if (
       this.gameState.state === "inProcess" &&
@@ -421,6 +400,7 @@ export default class GameController {
           ) {
             this.gamePlay.deselectCell(this.gameState.activeCharacter.position);
             this.action(index, "attack");
+            
           } else {
             GamePlay.showError(
               "Ошибка. Недопустимое действие выбранного персонажа"
@@ -468,18 +448,20 @@ export default class GameController {
           this.gamePlay.setCursor(cursors.notallowed);
         }
       }
-
-      this.gameState.playerTeam.characters.forEach((el) => {
-        if (el.position === index) {
-          this.gamePlay.showCellTooltip(
-            GameController.generateMessage(el.character),
-            index
-          );
-          this.gamePlay.setCursor(cursors.pointer);
-          this.activitedCell = index;
-        }
-      });
+      this.showCharacterInfo(this.gameState.playerTeam.characters, index);
+      this.showCharacterInfo(this.gameState.botTeam.characters, index);
     }
+  }
+
+  showCharacterInfo(character, index) {
+    character.forEach((el) => {
+      if (el.position === index) {
+        this.gamePlay.showCellTooltip(
+          GameController.generateMessage(el.character),
+          index
+        );
+      }
+    });
   }
 
   onCellLeave(index) {

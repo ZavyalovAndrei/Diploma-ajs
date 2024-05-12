@@ -11,6 +11,7 @@ export default class GameState {
     this.activeCharacter = null;
     this.score = { playerTeam: 0, botTeam: 0 };
     this.iGameState = 'inProcess';
+    this.maxCharacters = 4;
   }
 
   loadState(level, score) {
@@ -24,7 +25,7 @@ export default class GameState {
     const settings = {
       level: this.level,
       theme: this.themes[this.level - 1],
-      maxCharacters: 4,
+      maxCharacters: this.maxCharacters,
     };
     return settings;
   }
@@ -201,10 +202,12 @@ export default class GameState {
   }
 
   upLevel() {
-    this.level += 1;
-    const upperTeam = this.playerTeam.levelUp();
+    this.level ++;
+    this.playerTeam.characters.forEach(element => {
+      element.character.levelUp();
+    });
     this.playerTeam.clearAll();
     this.botTeam.clearAll();
-    return upperTeam;
+    return Array.from({length: this.playerTeam.characters.length}).map((_, index) => this.playerTeam.characters[index].character);
   }
 }
